@@ -18,19 +18,23 @@ class AgendamentoService {
   }
 
   // Método para listar todos os agendamentos
-  static Future<List<Agendamento>> listarAgendamentos() async {
-    try {
-      QuerySnapshot snapshot = await _agendamentos.get();
-      List<Agendamento> lista = snapshot.docs.map((doc) {
-        return Agendamento.fromMap(doc.data() as Map<String, dynamic>);
-      }).toList();
+  static Future<List<Agendamento>> listarAgendamentos(String uidUsuario) async {
+  try {
+    QuerySnapshot snapshot = await _agendamentos
+        .where('idUsuario', isEqualTo: uidUsuario)
+        .get();
 
-      return lista;
-    } catch (e) {
-      print("Erro ao listar agendamentos: $e");
-      rethrow;
-    }
+    List<Agendamento> lista = snapshot.docs.map((doc) {
+      return Agendamento.fromMap(doc.data() as Map<String, dynamic>);
+    }).toList();
+
+    return lista;
+  } catch (e) {
+    print("Erro ao listar agendamentos: $e");
+    rethrow;
   }
+}
+
 
   // Buscar agendamento por ID
   static Future<Agendamento?> buscarAgendamentoPorId(String id) async {
